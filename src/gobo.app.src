@@ -1,0 +1,13 @@
+{application, gobo,
+ [
+  {description, "Erlang doozer client"},
+  {vsn, "0.1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+		  protobuffs
+                 ]},
+  {mod, {gobo_app, []}},
+  {env, []}
+ ]}.

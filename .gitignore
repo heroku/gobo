@@ -1,0 +1,5 @@
+include/msg_pb.hrl
+ebin
+itest/*.beam
+erl_crash.dump
+deps

@@ -1,0 +1,69 @@
+package proto;
+
+message Request {
+  required int32 tag = 1;
+
+  enum Verb {
+      CHECKIN  = 0;  // cas, id          => cas
+      GET      = 1;  // path, id         => cas, value
+      SET      = 2;  // cas, path, value => cas
+      DEL      = 3;  // cas, path        => {}
+      ESET     = 4;  // cas, path        => {}
+      SNAP     = 5;  // {}               => rev, id
+      DELSNAP  = 6;  // id               => {}
+      NOOP     = 7;  // {}               => {}
+      WATCH    = 8;  // path             => {cas, path, value}+
+      WALK     = 9;  // path, id         => {cas, path, value}+
+      CANCEL   = 10; // id               => {}
+      GETDIR   = 14; // path, id         => {cas, value}+
+      STAT     = 16;
+
+
+      // future
+      MONITOR  = 11; // path             => {cas, path, value}+
+      SYNCPATH = 12; // path             => cas, value
+
+      // deprecated
+      JOIN     = 13;
+  }
+
+  required int32 verb = 2;
+
+  optional int64 cas = 3;
+  optional string path = 4;
+  optional bytes value = 5;
+  optional int32 id = 6;
+
+  optional int32 offset = 7;
+  optional int32 limit = 8;
+}
+
+message Response {
+  required int32 tag = 1;
+  required int32 flags = 2;
+
+  optional int64 rev = 3;
+  optional int64 cas = 4;
+  optional string path = 5;
+  optional bytes value = 6;
+  optional int32 id = 7;
+  optional int32 len = 8;
+
+  enum Err {
+    // don't use value 0
+    OTHER        = 127;
+    TAG_IN_USE   = 1;
+    UNKNOWN_VERB = 2;
+    REDIRECT     = 3;
+    INVALID_SNAP = 4;
+    CAS_MISMATCH = 5;
+    BAD_PATH     = 6;
+    MISSING_ARG  = 7;
+    NOTDIR       = 20;
+    ISDIR        = 21;
+    NOENT        = 22;
+  }
+
+  optional int32 err_code = 100;
+  optional string err_detail = 101;
+}
